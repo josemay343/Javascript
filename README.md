@@ -1,3 +1,10 @@
+### Resources
+
+- www.udacity.com
+- MDN web doc: developer.mozilla.org
+- www.w3schools.com
+- www.stackoverflow.com
+
 # Object Oriented Javascript 
 
 ## Student Instructions

@@ -20,13 +20,62 @@ function Human(species, weight, height, diet) {
 }
 // Get Dinosaur properties from json file and store in global variable
 // Used npx serve to create a local server to load the json file
-fetch('http://localhost:5000/dino.json')
+fetch('/dino.json')
     .then(result => result.json())
     .then(data => {
         this.dinos = data.Dinos.map((dino) => new Dino(dino.species, dino.weight, 
                         dino.height, dino.diet, dino.where, dino.when, dino.fact, dino.imagesrc));
         dinos = this.dinos
 });
+
+// Create Dino Compare Method 1
+// NOTE: Weight in JSON file is in lbs, height in inches.
+// Compares the dino weight against the human weight and returns a fact
+function getWeightFacts (human, dinoWeight, dinoSpecies) {
+    if (human.weight < dinoWeight) {
+        let weightDiff = dinoWeight - human.weight
+        weightFact =  `${dinoSpecies} is ${weightDiff} lbs heavier than ${human.species}`
+        return weightFact;
+    } else if (human.weight == dinoWeight) {
+        weightFact = `Wow! you're weight equals the ${dinoSpecies}`;
+        return weightFact;
+    } else {
+        let weightDiff = human.weight - dinoWeight
+        weightFact = `${human.species} is heavier than ${dinoSpecies} by ${weightDiff} lbs`;
+        return weightFact;
+    };
+}
+
+// Create Dino Compare Method 2
+// NOTE: Weight in JSON file is in lbs, height in inches.
+// Compares the dino height against the human height and returns a fact
+function getHeightFact (human, dinoHeight, dinoSpecies) {
+    if (human.height < dinoHeight) {
+        let heightDiff = dinoHeight - human.height
+        heightFact = `${dinoSpecies} is ${heightDiff} inches taller than ${human.species}`
+        return heightFact;
+    } else if (human.height == dinoHeight) {
+        heightFact = `Wow! you're height equals the ${dinoSpecies}`
+        return heightFact;
+    } else {
+        let heightDiff = human.height - dinoHeight
+        heightFact = `${human.species} is taller than ${dinoSpecies} by ${heightDiff} inches`
+        return heightFact;
+    }
+};
+
+// Create Dino Compare Method 3
+// NOTE: Weight in JSON file is in lbs, height in inches.
+// Compares the dino diet against the human diet and returns a fact
+function getDietFact(human, dinoDiet, dinoSpecies) {
+    if (human.diet == dinoDiet) {
+        dietFact = `${human.species} has the same ${dinoDiet} diet as the ${dinoSpecies}`
+        return dietFact
+    } else if (human.diet != dinoDiet){
+        dietFact = `${human.species} does not have the same ${dinoDiet} diet as the ${dinoSpecies}`
+        return dietFact
+    }
+};
 
 // On button click, prepare and display infographic
 const button = document.getElementById('btn');
@@ -62,43 +111,16 @@ function compare(human) {
         let dinoHeight = dinos[i].height;
         let dinoDiet = dinos[i].diet;
         let dinoFact = dinos[i].fact;
-
+        
         let dinoHumanComparedFacts = [];
         let weightFact,
             heightFact,
             dietFact
 
-        // Create Dino Compare Method 1
-        // NOTE: Weight in JSON file is in lbs, height in inches.
-        if (human.weight < dinoWeight) {
-            let weightDiff = dinoWeight - human.weight
-            weightFact = `${dinoSpecies} is ${weightDiff} lbs heavier than ${human.species}`
-        } else if (human.weight == dinoWeight) {
-            weightFact = `Wow! you're weight equals the ${dinoSpecies}`
-        } else {
-            let weightDiff = human.weight - dinoWeight
-            weightFact = `${human.species} is heavier than ${dinoSpecies} by ${weightDiff} lbs`
-        };
+        weightFact = getWeightFacts(human, dinoWeight, dinoSpecies);
+        heightFact = getHeightFact(human, dinoHeight, dinoSpecies);
+        dietFact = getDietFact(human, dinoDiet, dinoSpecies);
 
-        // Create Dino Compare Method 2
-        // NOTE: Weight in JSON file is in lbs, height in inches.
-        if (human.height < dinoHeight) {
-            let heightDiff = dinoHeight - human.height
-            heightFact = `${dinoSpecies} is ${heightDiff} inches taller than ${human.species}`
-        } else if (human.height == dinoHeight) {
-            heightFact = `Wow! you're height equals the ${dinoSpecies}`
-        } else {
-            let heightDiff = human.height - dinoHeight
-            heightFact = `${human.species} is taller than ${dinoSpecies} by ${heightDiff} inches`
-        };
-
-        // Create Dino Compare Method 3
-        // NOTE: Weight in JSON file is in lbs, height in inches.
-        if (human.diet == dinoDiet) {
-            dietFact = `${human.species} has the same ${dinoDiet} diet as the ${dinoSpecies}`
-        } else if (human.diet != dinoDiet){
-            dietFact = `${human.species} does not have the same ${dinoDiet} diet as the ${dinoSpecies}`
-        };
         // Push the dino and human comparison facts to an array
         dinoHumanComparedFacts.push(dinoSpecies, heightFact, weightFact, dietFact, dinoFact);
         allFacts.push(dinoHumanComparedFacts);
